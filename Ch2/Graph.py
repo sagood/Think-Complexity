@@ -1,3 +1,6 @@
+from queue import Queue
+
+
 class Vertex(object):
     """A Vertex is a node in a graph."""
 
@@ -130,6 +133,28 @@ class Graph(dict):
             w = vs2[i + n // 2]
             self.add_edge(Edge(v, w))
 
+    def is_connected(self):
+        self.bfs()
+        for v in self.vertices():
+            if not v.visited:
+                return False
+        return True
+
+    def bfs(self):
+        for v in self.vertices():
+            v.visited = False
+        q = Queue()
+        start_node = list(self.vertices())[0]
+        q.put(start_node)
+        start_node.visited = True
+
+        while not q.empty():
+            u = q.get()
+            for v in self[u].keys():
+                if not v.visited:
+                    q.put(v)
+                    v.visited = True
+
 
 def main(script, *args):
     v = Vertex('v')
@@ -173,6 +198,9 @@ def main(script, *args):
     """ test add_all_edges """
     g.add_all_edges()
     print(g)
+
+    """ test is_connected """
+    print(g.is_connected())
 
 if __name__ == '__main__':
     import sys
