@@ -13,6 +13,7 @@ class RandomGraph(Graph):
                 if i >= j: continue
                 if random() > p: continue
                 self.add_edge(Edge(v, w))
+                self.add_edge(Edge(w, v))
 
 
 def main(script, n=10, p=0.2, *args):
