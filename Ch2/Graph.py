@@ -99,6 +99,37 @@ class Graph(dict):
                 if i != j:
                     self.add_edge(Edge(v, w))
 
+    def add_regular_edges(self, d=2):
+        # see reference:  https://en.wikipedia.org/wiki/Regular_graph
+        vs = self.vertices()
+        if d >= len(vs):
+            raise (ValueError, "cannot build a regular graph.")
+
+        if d % 2 == 0:
+            self.add_regular_edges_even(d)
+        else:
+            if len(vs) % 2 != 0:
+                raise (ValueError, "cannot build a regular graph.")
+            self.add_regular_edges_even(d - 1)
+            self.add_regular_edges_odd()
+
+    def add_regular_edges_even(self, d=2):
+        vs = self.vertices()
+        vs2 = list(vs) * 2
+        for i, v in enumerate(vs):
+            for j in range(1, d // 2 + 1):
+                w = vs2[i + j]
+                self.add_edge(Edge(v, w))
+
+    def add_regular_edges_odd(self):
+        vs = self.vertices()
+        n = len(vs)
+        vs2 = list(vs) * 2
+        for i in range(n // 2):
+            v = vs2[i]
+            w = vs2[i + n // 2]
+            self.add_edge(Edge(v, w))
+
 
 def main(script, *args):
     v = Vertex('v')
